@@ -1,0 +1,36 @@
+services:
+  talker:
+    image: osrf/ros:humble-desktop
+    command: ros2 run demo_nodes_cpp talker
+    networks:
+      - dds
+
+  listener:
+    image: osrf/ros:humble-desktop
+    command: ros2 run demo_nodes_cpp listener
+    depends_on:
+      - talker
+    networks:
+      - dds
+   
+  bridge:
+    image: eclipse/zenoh-bridge-dds:latest
+    command: -e tcp/localhost:7447 -a /chatter
+    networks:
+      - zenoh
+      - dds
+
+  router:
+    image: eclipse/zenoh
+    restart: unless-stopped
+    networks:
+      - zenoh
+    ports:
+      - 7447:7447
+      - 8000:8000
+
+networks:
+  dds:
+    driver: bridge
+  zenoh:
+    driver: bridge
