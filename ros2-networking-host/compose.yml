@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   talker:
     image: osrf/ros:humble-desktop
@@ -15,21 +13,18 @@ services:
     network_mode: host
     ipc: host
 
-  zenoh-bridge:
+  bridge:
     image: eclipse/zenoh-bridge-dds:latest
-    command: -e tcp/localhost:7447 -a /chatter
-    ipc: host
+    command: -c /etc/zenohd/zenohd.yaml
+    volumes:
+      - ./zenohd.yml:/etc/zenohd/zenohd.yaml
     network_mode: host
-  
+    ipc: host
+
   router:
     image: eclipse/zenoh
     restart: unless-stopped
     ipc: host
     network_mode: host
-    # ports:
-    #   - 7447:7447
-    #   - 8000:8000
-    # volumes:
-    #   - ./zenoh_docker:/root/.zenoh
     environment:
       - RUST_LOG=debug

@@ -1,3 +1,8 @@
 connect:
   endpoints: 
     - 'tcp/localhost:7447'
+
+plugins:
+  dds:
+    allow:
+      - /chatter

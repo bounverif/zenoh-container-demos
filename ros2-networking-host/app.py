@@ -28,8 +28,6 @@ def main():
         help='A configuration file.')
     args = parser.parse_args()
 
-    print(args.config)
-
     # Create Zenoh Config from file if provoded, or a default one otherwise
     conf = zenoh.Config.from_file(args.config) if args.config is not None else zenoh.Config()
     # Open Zenoh Session

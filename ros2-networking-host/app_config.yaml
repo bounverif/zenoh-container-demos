@@ -1,0 +1,3 @@
+connect:
+  endpoints: 
+    - 'tcp/localhost:7447'
