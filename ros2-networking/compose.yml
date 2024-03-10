@@ -15,7 +15,9 @@ services:
    
   bridge:
     image: eclipse/zenoh-bridge-dds:latest
-    command: -e tcp/localhost:7447 -a /chatter
+    command: -c /etc/zenohd/zenohd.yaml
+    volumes:
+      - ./zenohd.yml:/etc/zenohd/zenohd.yaml
     networks:
       - zenoh
       - dds
