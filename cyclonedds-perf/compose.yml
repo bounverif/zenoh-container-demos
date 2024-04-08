@@ -13,8 +13,7 @@ services:
       context: .
       dockerfile: Dockerfile
     # command: ddsperf -Qrss:1 sub -T KS
-    command: bash -c "while true; do ping -c1 localhost; sleep 120; done"
-    # command: cyclonedds performance subscribe
+    command: cyclonedds performance subscribe
     networks:
       - dds
 
