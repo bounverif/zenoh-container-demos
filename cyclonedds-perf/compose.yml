@@ -1,0 +1,43 @@
+services:
+  talker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: ddsperf pub size 1k -T KS
+    command: cyclonedds performance publish --size 1k
+    networks:
+      - dds
+
+  listener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: ddsperf -Qrss:1 sub -T KS
+    command: bash -c "while true; do ping -c1 localhost; sleep 120; done"
+    # command: cyclonedds performance subscribe
+    networks:
+      - dds
+
+  bridge:
+    image: eclipse/zenoh-bridge-dds:latest
+    command: -c /etc/zenohd/zenohd.yaml
+    volumes:
+      - ./zenohd.yml:/etc/zenohd/zenohd.yaml
+    networks:
+      - zenoh
+      - dds
+
+  router:
+    image: eclipse/zenoh
+    restart: unless-stopped
+    networks:
+      - zenoh
+    ports:
+      - 7447:7447
+      - 8000:8000
+
+networks:
+  dds:
+    driver: bridge
+  zenoh:
+    driver: bridge

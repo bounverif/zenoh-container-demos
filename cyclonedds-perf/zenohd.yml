@@ -1,0 +1,8 @@
+connect:
+  endpoints: 
+    - 'tcp/localhost:7447'
+
+plugins:
+  dds:
+    allow:
+      - DDSPerfRDataKS # Raw DDS topics doesn't require a forward slash prefix
