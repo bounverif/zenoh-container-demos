@@ -1,0 +1,29 @@
+services:
+  talker:
+    build:
+      context: ./publisher
+    command: python /app/main.py
+    networks:
+      - zenoh
+
+  listener:
+    build:
+      context: ./subscriber
+    # command: python /app/main.py
+    command: /bin/bash
+    tty: true
+    networks:
+      - zenoh
+  
+  router:
+    image: eclipse/zenoh
+    restart: unless-stopped
+    networks:
+      - zenoh
+    ports:
+      - 7447:7447
+      - 8000:8000
+
+networks:
+  zenoh:
+    driver: bridge
