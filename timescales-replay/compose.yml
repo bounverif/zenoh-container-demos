@@ -9,9 +9,14 @@ services:
   listener:
     build:
       context: ./subscriber
-    # command: python /app/main.py
-    command: /bin/bash
-    tty: true
+    command: python /app/main.py
+    networks:
+      - zenoh
+
+  listener-cpp:
+    build:
+      context: ./subscriber-cpp
+    command: subscriber
     networks:
       - zenoh
   

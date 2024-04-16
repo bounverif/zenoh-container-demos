@@ -1,18 +1,13 @@
-import sys
 import time
 import argparse
-import itertools
-import json
 import zenoh
-import jsonlines
-from zenoh import config
 
 
 def main():
 
-    # --- Command line argument parsing --- --- --- --- --- ---
+    # Command line argument parsing
     parser = argparse.ArgumentParser(
-        prog='Timescales Publisher',
+        prog='publisher',
         description='Timescales publisher example')
     parser.add_argument('--replay', '-r', dest='replay_file',
                         default='/app/timescales/largesuite/AbsentAQ/AbsentAQ10.jsonl',
@@ -33,19 +28,23 @@ def main():
                         help='A configuration file.')
 
     args = parser.parse_args()
+
+    # Create Zenoh Config from file if provoded, or a default one otherwise
     conf = zenoh.Config.from_file(args.config) if args.config is not None else zenoh.Config()
 
-    zenoh.init_logger()
-
-    print("Opening session...")
+    # Open Zenoh Session
     session = zenoh.open(conf)
-    
+
+    # Declare a publisher
     pub = session.declare_publisher(args.key)
+    publish_period = args.period_us / 1e6
+
     with open(args.replay_file) as file:
+        print(f"Replaying {args.replay_file} with period {publish_period} seconds")
         for line in file:
             buf = line.rstrip()
             pub.put(buf)
-            time.sleep(args.period_us / 1e6)
+            time.sleep(publish_period)
 
     pub.undeclare()
     session.close()
