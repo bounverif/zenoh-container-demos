@@ -14,7 +14,8 @@ namespace po = boost::program_options;
 
 void listener_callback(const z_sample_t* sample, void* arg)
 {
-  printf(">> [Subscriber] Received '%.*s')\n", (int)sample->payload.len, sample->payload.start);
+  //printf(">> [Subscriber] Received '%.*s'\n", (int)sample->payload.len, sample->payload.start);
+  std::cout << ">> [Subscriber] Received '" << std::string_view((const char*) sample->payload.start, sample->payload.len) << "'\n";
 }
 
 int main(int argc, char** argv)
