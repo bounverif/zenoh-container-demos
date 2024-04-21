@@ -1,0 +1,27 @@
+services:
+  talker:
+    build:
+      context: ./publisher
+    command: python /app/main.py
+    networks:
+      - zenoh
+
+  reelayd:
+    build:
+      context: ./reelayd
+    command: reelayd --expr "{p}"
+    networks:
+      - zenoh
+  
+  router:
+    image: eclipse/zenoh
+    restart: unless-stopped
+    networks:
+      - zenoh
+    ports:
+      - 7447:7447
+      - 8000:8000
+
+networks:
+  zenoh:
+    driver: bridge
