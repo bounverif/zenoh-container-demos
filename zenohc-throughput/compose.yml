@@ -1,0 +1,18 @@
+services:
+  talker:
+    build:
+      context: ./publisher
+    command: publisher 1024
+    networks:
+      - zenoh
+
+  listener:
+    build:
+      context: ./subscriber
+    command: subscriber
+    networks:
+      - zenoh
+
+networks:
+  zenoh:
+    driver: bridge
