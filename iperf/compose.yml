@@ -1,0 +1,18 @@
+services:
+  server:
+    image: networkstatic/iperf3
+    command: -s
+    networks:
+      - perf
+
+  client:
+    image: networkstatic/iperf3
+    command: -c iperf-server-1
+    networks:
+      - perf
+    depends_on:
+      - server
+
+networks:
+  perf:
+    driver: bridge
