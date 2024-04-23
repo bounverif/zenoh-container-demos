@@ -1,0 +1,20 @@
+services:
+  talker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ddsperf pub size 16k -T KS
+    networks:
+      - dds
+
+  listener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ddsperf -Qrss:1 sub -T KS
+    networks:
+      - dds
+
+networks:
+  dds:
+    driver: bridge
