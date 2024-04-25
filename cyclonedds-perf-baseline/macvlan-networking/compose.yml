@@ -1,0 +1,16 @@
+services:
+  talker:
+    image: ghcr.io/bounverif/cyclonedds:latest 
+    command: ddsperf pub size 16k -T KS
+    networks:
+      - dds
+
+  listener:
+    image: ghcr.io/bounverif/cyclonedds:latest 
+    command: ddsperf sub -T KS
+    networks:
+      - dds
+
+networks:
+  dds:
+    driver: macvlan

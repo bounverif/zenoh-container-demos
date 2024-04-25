@@ -1,0 +1,9 @@
+services:
+  talker:
+    image: ghcr.io/bounverif/cyclonedds:latest 
+    command: ddsperf pub size 16k -T KS
+
+  listener:
+    image: ghcr.io/bounverif/cyclonedds:latest 
+    command: ddsperf sub -T KS
+    network_mode: service:talker
